@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>วันครบรอบ Max & Pin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Sarabun:wght@300;400&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --rose: #c2566b;
+      --blush: #f5d0d8;
+      --cream: #fdf6f0;
+      --deep: #2a1a20;
+      --gold: #c9a96e;
+      --muted: #8a6570;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--cream);
+      color: var(--deep);
+      font-family: 'Sarabun', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      cursor: default;
+    }
+
+    /* ─── GRAIN OVERLAY ─── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 9999; opacity: .5;
+    }
+
+    /* ─── FLOATING PETALS ─── */
+    .petals { position: fixed; inset: 0; pointer-events: none; z-index: 1; overflow: hidden; }
+    .petal {
+      position: absolute;
+      top: -40px;
+      font-size: 1.2rem;
+      animation: fall linear infinite;
+      opacity: 0.5;
+    }
+    @keyframes fall {
+      0%   { transform: translateY(0) rotate(0deg); opacity: 0.6; }
+      100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 3rem 2rem;
+      position: relative;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 0%, #f9dde5 0%, transparent 70%),
+        radial-gradient(ellipse 60% 40% at 80% 100%, #fae8d4 0%, transparent 60%),
+        var(--cream);
+    }
+
+    .hero-tag {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1rem;
+      color: var(--rose);
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      opacity: 0;
+      animation: fadeUp 1s ease 0.3s forwards;
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.8rem, 8vw, 6rem);
+      font-weight: 700;
+      line-height: 1.1;
+      color: var(--deep);
+      margin: 1rem 0 0.5rem;
+      opacity: 0;
+      animation: fadeUp 1s ease 0.6s forwards;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: var(--rose);
+    }
+
+    .hero-sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.1rem, 3vw, 1.6rem);
+      color: var(--muted);
+      font-style: italic;
+      margin-bottom: 2.5rem;
+      opacity: 0;
+      animation: fadeUp 1s ease 0.9s forwards;
+    }
+
+    .divider {
+      width: 120px; height: 1px;
+      background: linear-gradient(to right, transparent, var(--gold), transparent);
+      margin: 1.5rem auto;
+      opacity: 0;
+      animation: fadeUp 1s ease 1.2s forwards;
+    }
+
+    .counter-box {
+      display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 1s ease 1.4s forwards;
+    }
+
+    .count-item { text-align: center; }
+    .count-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem; font-weight: 700;
+      color: var(--rose); line-height: 1;
+    }
+    .count-label {
+      font-size: 0.75rem; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--muted);
+      margin-top: 0.3rem;
+    }
+
+    /* ─── PHOTO SECTION ─── */
+    .photo-section {
+      padding: 6rem 2rem;
+      background:
+        radial-gradient(ellipse 70% 50% at 20% 50%, #fce8ee 0%, transparent 60%),
+        var(--cream);
+    }
+
+    .section-title {
+      text-align: center;
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 400;
+      color: var(--deep);
+      margin-bottom: 0.5rem;
+    }
+    .section-title em { font-style: italic; color: var(--rose); }
+
+    .section-sub {
+      text-align: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      color: var(--muted);
+      font-size: 1.1rem;
+      margin-bottom: 3rem;
+    }
+
+    /* Upload zone */
+    .upload-zone {
+      border: 2px dashed var(--blush);
+      border-radius: 16px;
+      padding: 3rem 2rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: rgba(255,255,255,0.5);
+      max-width: 500px;
+      margin: 0 auto 3rem;
+      position: relative;
+    }
+    .upload-zone:hover, .upload-zone.dragging {
+      border-color: var(--rose);
+      background: rgba(194,86,107,0.05);
+      transform: scale(1.01);
+    }
+    .upload-zone input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+    .upload-icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
+    .upload-text { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; color: var(--muted); font-style: italic; }
+    .upload-hint { font-size: 0.8rem; color: #bbb; margin-top: 0.5rem; }
+
+    /* Photo grid */
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .photo-card {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      aspect-ratio: 4/5;
+      box-shadow: 0 8px 30px rgba(42,26,32,0.1);
+      cursor: pointer;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      animation: popIn 0.5s ease backwards;
+    }
+    .photo-card:hover { transform: translateY(-6px) rotate(0.5deg); box-shadow: 0 20px 50px rgba(42,26,32,0.18); }
+    .photo-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .photo-card .overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(42,26,32,0.5) 0%, transparent 60%);
+      opacity: 0; transition: opacity 0.3s;
+      display: flex; align-items: flex-end; padding: 1rem;
+    }
+    .photo-card:hover .overlay { opacity: 1; }
+    .photo-card .delete-btn {
+      position: absolute; top: 0.5rem; right: 0.5rem;
+      background: rgba(255,255,255,0.85); border: none; border-radius: 50%;
+      width: 28px; height: 28px; font-size: 0.8rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity 0.3s; color: var(--rose);
+    }
+    .photo-card:hover .delete-btn { opacity: 1; }
+
+    .photo-caption {
+      width: 100%; color: white;
+      font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 0.95rem;
+    }
+    .photo-caption input {
+      background: transparent; border: none; border-bottom: 1px solid rgba(255,255,255,0.5);
+      color: white; width: 100%; font-family: inherit; font-style: inherit; font-size: inherit;
+      outline: none; padding: 2px 0;
+    }
+    .photo-caption input::placeholder { color: rgba(255,255,255,0.7); }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.85); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 2rem;
+      color: var(--muted);
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.2rem;
+      display: none;
+    }
+
+    /* ─── MESSAGE SECTION ─── */
+    .message-section {
+      padding: 6rem 2rem;
+      text-align: center;
+      background:
+        radial-gradient(ellipse 80% 50% at 80% 50%, #fde8d8 0%, transparent 60%),
+        var(--cream);
+    }
+
+    .love-letter {
+      max-width: 680px;
+      margin: 3rem auto 0;
+      background: white;
+      border-radius: 20px;
+      padding: 3rem 3.5rem;
+      box-shadow: 0 20px 60px rgba(42,26,32,0.08);
+      position: relative;
+      text-align: left;
+    }
+    .love-letter::before {
+      content: '❝';
+      position: absolute; top: -1rem; left: 2rem;
+      font-size: 4rem; color: var(--blush);
+      font-family: 'Playfair Display', serif; line-height: 1;
+    }
+
+    .love-letter textarea {
+      width: 100%;
+      border: none; outline: none; resize: none;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem; line-height: 2;
+      color: var(--deep);
+      background: transparent;
+      min-height: 200px;
+    }
+    .letter-hint {
+      font-size: 0.78rem; color: #ccc; text-align: right; margin-top: 1rem;
+      font-style: italic;
+    }
+
+    .save-btn {
+      margin-top: 1.5rem;
+      background: var(--rose);
+      color: white; border: none;
+      padding: 0.9rem 2.5rem;
+      border-radius: 50px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem; font-style: italic;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: block; margin: 1.5rem auto 0;
+    }
+    .save-btn:hover { background: var(--deep); transform: translateY(-2px); box-shadow: 0 10px 30px rgba(194,86,107,0.3); }
+
+    /* ─── TIMELINE ─── */
+    .timeline-section {
+      padding: 6rem 2rem;
+      max-width: 700px; margin: 0 auto;
+    }
+
+    .timeline { position: relative; padding: 2rem 0; }
+    .timeline::before {
+      content: '';
+      position: absolute; left: 50%; top: 0; bottom: 0; width: 1px;
+      background: linear-gradient(to bottom, transparent, var(--blush), transparent);
+      transform: translateX(-50%);
+    }
+
+    .tl-item {
+      display: flex; justify-content: flex-end;
+      padding-right: calc(50% + 2rem); margin-bottom: 2.5rem;
+      position: relative; animation: fadeUp 0.6s ease backwards;
+    }
+    .tl-item:nth-child(even) {
+      justify-content: flex-start;
+      padding-right: 0; padding-left: calc(50% + 2rem);
+    }
+    .tl-dot {
+      position: absolute; left: 50%; top: 1rem;
+      width: 12px; height: 12px;
+      background: var(--rose); border-radius: 50%;
+      transform: translateX(-50%);
+      box-shadow: 0 0 0 4px var(--blush);
+    }
+    .tl-card {
+      background: white; border-radius: 14px;
+      padding: 1.2rem 1.5rem;
+      box-shadow: 0 8px 25px rgba(42,26,32,0.07);
+      max-width: 260px;
+    }
+    .tl-date {
+      font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 0.4rem;
+    }
+    .tl-event {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem; color: var(--deep);
+    }
+
+    /* Add milestone */
+    .add-milestone {
+      text-align: center; margin-top: 2rem;
+    }
+    .add-milestone-form {
+      display: none; flex-wrap: wrap; gap: 0.75rem;
+      justify-content: center; margin-top: 1rem;
+    }
+    .add-milestone-form.open { display: flex; }
+    .add-milestone-form input {
+      border: 1px solid var(--blush); border-radius: 8px;
+      padding: 0.6rem 1rem;
+      font-family: 'Sarabun', sans-serif; font-size: 0.9rem;
+      outline: none; color: var(--deep);
+    }
+    .add-milestone-form input:focus { border-color: var(--rose); }
+
+    .ghost-btn {
+      background: transparent; border: 1.5px solid var(--rose);
+      color: var(--rose); padding: 0.7rem 2rem;
+      border-radius: 50px; cursor: pointer;
+      font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1rem;
+      transition: all 0.3s;
+    }
+    .ghost-btn:hover { background: var(--rose); color: white; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      text-align: center;
+      padding: 4rem 2rem;
+      background: var(--deep);
+      color: rgba(255,255,255,0.4);
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic; font-size: 1rem;
+    }
+    footer span { color: var(--rose); }
+
+    /* ─── LIGHTBOX ─── */
+    .lightbox {
+      display: none; position: fixed; inset: 0;
+      background: rgba(20,10,14,0.92); z-index: 1000;
+      align-items: center; justify-content: center;
+    }
+    .lightbox.open { display: flex; }
+    .lightbox img {
+      max-width: 90vw; max-height: 85vh;
+      border-radius: 8px; object-fit: contain;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+    }
+    .lightbox-close {
+      position: absolute; top: 1.5rem; right: 1.5rem;
+      color: white; font-size: 2rem; cursor: pointer;
+      background: none; border: none; line-height: 1;
+    }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Scroll reveal */
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 600px) {
+      .timeline::before { left: 1.2rem; }
+      .tl-item, .tl-item:nth-child(even) {
+        justify-content: flex-start;
+        padding-right: 0; padding-left: 3.5rem;
+      }
+      .tl-dot { left: 1.2rem; }
+      .love-letter { padding: 2rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Floating petals -->
+<div class="petals" id="petals"></div>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <p class="hero-tag">✦ วันครบรอบ ✦</p>
+  <h1 class="hero-title">รักของเรา<br/><em>ยังคงสวยงาม</em></h1>
+  <p class="hero-sub" id="heroSub">ทุกวันที่ผ่านไปคือของขวัญที่ดีที่สุด</p>
+  <div class="divider"></div>
+  <div class="counter-box">
+    <div class="count-item">
+      <div class="count-num" id="dayCount">—</div>
+      <div class="count-label">วัน</div>
+    </div>
+    <div class="count-item">
+      <div class="count-num" id="monthCount">—</div>
+      <div class="count-label">เดือน</div>
+    </div>
+    <div class="count-item">
+      <div class="count-num" id="yearCount">—</div>
+      <div class="count-label">ปี</div>
+    </div>
+  </div>
+
+  <!-- Date picker -->
+  <div style="margin-top:2.5rem;opacity:0;animation:fadeUp 1s ease 1.7s forwards;">
+    <label style="font-size:0.78rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:0.5rem;">วันที่เริ่มต้นความรัก</label>
+    <input type="date" id="startDate"
+      style="border:1px solid var(--blush);background:white;padding:0.6rem 1.2rem;border-radius:30px;
+      font-family:'Sarabun',sans-serif;color:var(--deep);outline:none;cursor:pointer;font-size:0.95rem;"
+    />
+  </div>
+</section>
+
+<!-- ── PHOTO SECTION ── -->
+<section class="photo-section">
+  <h2 class="section-title reveal">ความทรงจำของ<em>เรา</em></h2>
+  <p class="section-sub reveal">เพิ่มรูปภาพ</p>
+
+  <div class="upload-zone" id="uploadZone">
+    <input type="file" id="photoInput" accept="image/*" multiple />
+    <div class="upload-icon">🌸</div>
+    <div class="upload-text">คลิกหรือลากรูปภาพมาวางที่นี่</div>
+    <div class="upload-hint">รองรับ JPG, PNG, WEBP ทุกขนาด</div>
+  </div>
+
+  <div class="photo-grid" id="photoGrid"></div>
+  <div class="empty-state" id="emptyState">ยังไม่มีรูปภาพ — เริ่มเพิ่มความทรงจำของคุณเลย 🌷</div>
+</section>
+
+<!-- ── MESSAGE SECTION ── -->
+<section class="message-section">
+  <h2 class="section-title reveal">จดหมาย<em>รัก</em></h2>
+  <p class="section-sub reveal">บอกเขา / เธอว่าคุณรู้สึกอย่างไร</p>
+  <div class="love-letter reveal">
+    <textarea id="loveMessage" rows="8" placeholder="ที่รัก,&#10;&#10;วันนี้ฉันอยากบอกว่า..."></textarea>
+    <div class="letter-hint">พิมพ์จากใจ ❤️</div>
+    <button class="save-btn" onclick="saveMessage()">บันทึกจดหมาย ✦</button>
+  </div>
+</section>
+
+<!-- ── TIMELINE ── -->
+<section class="timeline-section">
+  <h2 class="section-title reveal" style="text-align:center;">เรื่องราว<em>ของเรา</em></h2>
+  <p class="section-sub reveal">ช่วงเวลาพิเศษที่จะจดจำตลอดไป</p>
+
+  <div class="timeline" id="timeline">
+    <!-- default items -->
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-card">
+        <div class="tl-date" id="tlStartLabel">วันแรก</div>
+        <div class="tl-event">วันที่คบกัน</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-card">
+        <div class="tl-date">28/12/2025</div>
+        <div class="tl-event">ไปดูหนังกันครั้งแรก</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-card">
+        <div class="tl-date">ช่วงเวลาพิเศษ</div>
+        <div class="tl-event">✈️ ท่องเที่ยวด้วยกันครั้งแรก</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="add-milestone">
+    <button class="ghost-btn" onclick="toggleMilestoneForm()">+ เพิ่มช่วงเวลาพิเศษ</button>
+    <div class="add-milestone-form" id="milestoneForm">
+      <input type="text" id="mlDate" placeholder="เช่น วาเลนไทน์ปีที่แล้ว" style="flex:1;min-width:140px;" />
+      <input type="text" id="mlEvent" placeholder="เหตุการณ์... 🌸" style="flex:2;min-width:180px;" />
+      <button class="ghost-btn" onclick="addMilestone()">เพิ่ม</button>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div style="font-size:1.8rem;margin-bottom:0.8rem;">♡</div>
+  สร้างด้วย<span> ความรัก </span>เพื่อคนพิเศษของคุณ @nongmaxxxx
+</footer>
+
+<!-- ── LIGHTBOX ── -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img id="lightboxImg" src="" alt="" />
+</div>
+
+<script>
+  // ── PETALS ──
+  const petalsEl = document.getElementById('petals');
+  const emojis = ['🌸','🌺','🌹','💮','✿'];
+  for (let i = 0; i < 18; i++) {
+    const p = document.createElement('div');
+    p.className = 'petal';
+    p.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    p.style.left = Math.random() * 100 + 'vw';
+    p.style.fontSize = (0.8 + Math.random() * 1) + 'rem';
+    p.style.animationDuration = (8 + Math.random() * 10) + 's';
+    p.style.animationDelay = (-Math.random() * 12) + 's';
+    petalsEl.appendChild(p);
+  }
+
+  // ── DATE COUNTER ──
+  const startDateInput = document.getElementById('startDate');
+  // Load saved date
+  const savedDate = localStorage.getItem('anniversaryDate');
+  if (savedDate) startDateInput.value = savedDate;
+
+  function updateCounter() {
+    const val = startDateInput.value;
+    if (!val) return;
+    localStorage.setItem('anniversaryDate', val);
+    const start = new Date(val);
+    const now = new Date();
+    const diffMs = now - start;
+    if (diffMs < 0) { document.getElementById('dayCount').textContent = '?'; return; }
+    const totalDays = Math.floor(diffMs / 86400000);
+    const years = Math.floor(totalDays / 365);
+    const months = Math.floor((totalDays % 365) / 30);
+    const days = totalDays % 30;
+    document.getElementById('dayCount').textContent = days;
+    document.getElementById('monthCount').textContent = months;
+    document.getElementById('yearCount').textContent = years;
+    // update timeline
+    document.getElementById('tlStartLabel').textContent = start.toLocaleDateString('th-TH', {year:'numeric',month:'long',day:'numeric'});
+  }
+  startDateInput.addEventListener('change', updateCounter);
+  updateCounter();
+
+  // ── PHOTO UPLOAD (localStorage) ──
+  const photoInput = document.getElementById('photoInput');
+  const photoGrid  = document.getElementById('photoGrid');
+  const uploadZone = document.getElementById('uploadZone');
+  const emptyState = document.getElementById('emptyState');
+
+  // Load photos array from localStorage
+  function loadPhotos() {
+    try { return JSON.parse(localStorage.getItem('anniversaryPhotos') || '[]'); }
+    catch { return []; }
+  }
+
+  // Save photos array to localStorage
+  function savePhotos() {
+    const cards = [...photoGrid.querySelectorAll('.photo-card')];
+    const data = cards.map(card => ({
+      src:     card.dataset.src,
+      caption: card.querySelector('.photo-caption input').value
+    }));
+    try {
+      localStorage.setItem('anniversaryPhotos', JSON.stringify(data));
+    } catch(e) {
+      alert('พื้นที่จัดเก็บเต็ม! ลองลบรูปบางรูปก่อนนะคะ 🙏');
+    }
+  }
+
+  function checkEmpty() {
+    emptyState.style.display = photoGrid.children.length === 0 ? 'block' : 'none';
+  }
+
+  function createCard(src, caption = '') {
+    const card = document.createElement('div');
+    card.className = 'photo-card';
+    card.dataset.src = src;
+    card.style.animationDelay = (photoGrid.children.length * 0.08) + 's';
+    card.innerHTML = `
+      <img src="${src}" alt="ความทรงจำ" />
+      <div class="overlay">
+        <div class="photo-caption">
+          <input type="text" placeholder="เขียนคำบรรยาย..." value="${caption.replace(/"/g,'&quot;')}" />
+        </div>
+      </div>
+      <button class="delete-btn">✕</button>
+    `;
+    // Events
+    card.querySelector('img').addEventListener('click', () => openLightbox(src));
+    card.querySelector('.delete-btn').addEventListener('click', () => {
+      card.remove(); savePhotos(); checkEmpty();
+    });
+    card.querySelector('.photo-caption input').addEventListener('input', savePhotos);
+    photoGrid.appendChild(card);
+    checkEmpty();
+  }
+
+  function addPhotoFromFile(file) {
+    const reader = new FileReader();
+    reader.onload = ev => {
+      createCard(ev.target.result);
+      savePhotos();
+    };
+    reader.readAsDataURL(file);
+  }
+
+  // Restore saved photos on load
+  loadPhotos().forEach(({ src, caption }) => createCard(src, caption));
+  checkEmpty();
+
+  photoInput.addEventListener('change', e => {
+    [...e.target.files].forEach(addPhotoFromFile);
+    e.target.value = ''; // allow re-upload same file
+  });
+
+  // Drag & drop
+  uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.classList.add('dragging'); });
+  uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('dragging'));
+  uploadZone.addEventListener('drop', e => {
+    e.preventDefault(); uploadZone.classList.remove('dragging');
+    [...e.dataTransfer.files].filter(f => f.type.startsWith('image/')).forEach(addPhotoFromFile);
+  });
+
+  // ── LIGHTBOX ──
+  function openLightbox(src) {
+    document.getElementById('lightboxImg').src = src;
+    document.getElementById('lightbox').classList.add('open');
+  }
+  function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); }
+  document.getElementById('lightbox').addEventListener('click', e => { if (e.target === e.currentTarget) closeLightbox(); });
+
+  // ── LOVE MESSAGE ──
+  const loveMsg = document.getElementById('loveMessage');
+  const saved = localStorage.getItem('loveMessage');
+  if (saved) loveMsg.value = saved;
+
+  function saveMessage() {
+    localStorage.setItem('loveMessage', loveMsg.value);
+    const btn = document.querySelector('.save-btn');
+    btn.textContent = 'บันทึกแล้ว ✓';
+    btn.style.background = '#7a9e7e';
+    setTimeout(() => { btn.textContent = 'บันทึกจดหมาย ✦'; btn.style.background = ''; }, 2000);
+  }
+
+  // ── TIMELINE ──
+  function toggleMilestoneForm() {
+    document.getElementById('milestoneForm').classList.toggle('open');
+  }
+
+  function addMilestone() {
+    const date = document.getElementById('mlDate').value.trim();
+    const event = document.getElementById('mlEvent').value.trim();
+    if (!date || !event) return;
+    const tl = document.getElementById('timeline');
+    const item = document.createElement('div');
+    item.className = 'tl-item';
+    item.style.animationDelay = '0s';
+    item.innerHTML = `
+      <div class="tl-dot"></div>
+      <div class="tl-card">
+        <div class="tl-date">${date}</div>
+        <div class="tl-event">${event}</div>
+      </div>
+    `;
+    tl.appendChild(item);
+    document.getElementById('mlDate').value = '';
+    document.getElementById('mlEvent').value = '';
+    toggleMilestoneForm();
+  }
+
+  // ── SCROLL REVEAL ──
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
